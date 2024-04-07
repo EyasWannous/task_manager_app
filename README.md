@@ -34,7 +34,7 @@ This app demonstrates various Flutter development skills, including:
 * **Additional Features:** Added Dark theme, Animation and BLoC Observer for insure that the bloc react well
   and change his state for every action that needs to change the state.
 
-**Getting Started
+## Getting Started
 
 1. Clone this repository.
 2. Install dependencies: `flutter pub get`
