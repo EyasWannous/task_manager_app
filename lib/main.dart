@@ -1,69 +1,44 @@
+import 'dart:developer';
+
+import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_authentication/internet_authentication.dart';
+import 'package:internet_tasks/internet_tasks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:task_manager_app/app/app.dart';
+import 'package:task_manager_app/app/app_bloc_observer.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  FlutterError.onError = (details) {
+    log(details.exceptionAsString(), stackTrace: details.stack);
+  };
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  Bloc.observer = const AppBlocObserver();
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
+  final plugin = await SharedPreferences.getInstance();
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  final tasksApi = TaskRepository(
+    client: TaskClient(),
+    stroage: TaskStroage(plugin: plugin),
+  );
 
-  final String title;
+  final authenticationApi = AuthenticationRepository(
+    client: AuthenticationClient(),
+    plugin: plugin,
+  );
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
+  final internetAuthentication = InternetAuthentication(
+    authenticationApi: authenticationApi,
+  );
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final internetTasks = InternetTasks(tasksApi: tasksApi);
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  final token = await internetAuthentication.checkLoggedIn();
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+  runApp(App(
+    internetTasks: internetTasks,
+    internetAuthentication: internetAuthentication,
+    token: token,
+  ));
 }
