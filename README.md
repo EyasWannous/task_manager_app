@@ -40,7 +40,7 @@ This app demonstrates various Flutter development skills, including:
 2. Install dependencies: `flutter pub get`
 3. Run the app: `flutter run`
 
-**Note**
+## Note
 
 I build this app in three days for applying to a Flutter Developer position.
 
