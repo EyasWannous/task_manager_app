@@ -41,6 +41,9 @@ This app demonstrates various Flutter development skills, including:
 3. Run the app: `flutter run`
 
 **Note**
+
 I build this app in three days for applying to a Flutter Developer position.
 
-I don't recommend building any app depending on **(reqres.in api)**
+Lack of **Unit Testing**.
+
+I don't recommend building any app depending on **(reqres.in api)**.
