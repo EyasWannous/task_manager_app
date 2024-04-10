@@ -1,4 +1,4 @@
-# Flutter Task Manager App (Test Project)
+# Flutter Task Manager App
 
 This Flutter project is a task manager app designed to help users efficiently manage their tasks.
 The app incorporates various features and best practices of Flutter development,
